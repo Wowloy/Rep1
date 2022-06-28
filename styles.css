@@ -106,3 +106,27 @@ h1 {
 }
 
 
+@media (max-width: 400px) {
+
+  h1{
+    font-size: 36px;
+  }
+
+  .screen h1 {
+    font-size: 26px;
+  }
+
+  a{
+    font-size: ;
+  }
+
+  .board {
+  width: 250px;
+  height: 250px;
+}
+
+.time-btn {
+  
+  font-size: 1rem;
+}
+}
