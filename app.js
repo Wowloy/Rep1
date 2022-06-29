@@ -2,6 +2,7 @@ const startBtn = document.querySelector('#srart')
 const screens = document.querySelectorAll('.screen')
 const timeList = document.getElementById('time-list')
 let time = 0
+const restartBtn = document.querySelector('#restart')
 const timeEl = document.querySelector('#time')
 const board = document.querySelector('#board')
 let point = 0
@@ -15,6 +16,8 @@ startBtn.addEventListener('click', (event) => {
 timeList.addEventListener('click', event => 
 {
     if (event.target.classList.contains('time-btn')) {
+        restartBtn.classList.add('hide')
+        timeEl.parentNode.classList.remove('hide')
         time = parseInt (event.target.getAttribute('data-time'))
         screens[1].classList.add('up')
         startGame()
@@ -28,12 +31,19 @@ board.addEventListener('click', (event) => {
         event.target.remove()
         createRandomCircle()
     }
-    
 })
 
+restartBtn.addEventListener('click', () => { //РЕСТАРТ
+    console.log('1')
+    screens[1].classList.remove('up')
+    const pointText = document.querySelector('.point')
+    console.log(pointText);
+    // pointText.remove()
+    board.removeChild(pointText)
+})
 
 function startGame() {
-    setInterval(decreaseTime, 1000)
+    setTimeout(decreaseTime, 1000)
     createRandomCircle()
     setTime(time)
 }
@@ -41,12 +51,14 @@ function startGame() {
 function decreaseTime() {
     if (time === 0 ) {
         finishGame()
+        //ОЧИСТИТЬ ИНТЕРВАЛ
     } else {
         let current = --time
         if (current < 10) {
             current = `0${current}`
         }
         setTime(current)
+        setTimeout(decreaseTime, 1000)
     }
 }
 
@@ -54,19 +66,20 @@ function setTime(value) {
     timeEl.innerHTML = `00:${value}`
 }
 
-function finishGame() {
+function finishGame() { //ФИНИШ
+    restartBtn.classList.remove('hide')
     timeEl.parentNode.classList.add('hide')
-    board.innerHTML = `<h1>Счёт: <span class="primary">${point} </span></h1>`
-    restart.style.display = 'inline'
+    board.innerHTML = `<h1 class="point" >Счёт: <span class="primary">${point} </span></h1>`
 } 
 
 function createRandomCircle() {
     const circle = document.createElement('div')
-    const {width, height} = board.getBoundingClientRect()
+    const width  = document.documentElement.clientHeight * 0.7
+    const height =  document.documentElement.clientWidth * 0.7
 
     const size = getRandomNumber(15, 65)
-    const x = getRandomNumber(0 + size, width - size)
-    const y = getRandomNumber(0 + size, height - size)
+    const x = getRandomNumber(0, width - size)
+    const y = getRandomNumber(0, height - size)
 
     circle.classList.add('circle')
     circle.style.width = `${size}px`
